@@ -1,5 +1,5 @@
-#ifndef HOLBERTON_H
-#define HOLBERTON_H
+#ifndef MAIN_H
+#define MAIN_H
 
 #include <stdarg.h>
 #include <stddef.h>
@@ -14,8 +14,8 @@
  */
 typedef struct structprint
 {
-	char *q;
-	int (*u)(char *format, va_list);
+        char *q;
+        int (*u)(char *format, va_list);
 } structype;
 
 int _putchar(char ch);
