@@ -1,52 +1,50 @@
-#include <stdarg.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stddef.h>
-#include <unistd.h>
-#include "main.h"
+#include "holberton.h"
 
 /**
- * _printf - produces output according to a format
- * @format: The specified format
- *
- * Return: The number of characters that were printed
+ * _printf - prints formatted data to stdout
+ * @format: string that contains the format to print
+ * Return: number of characters written
  */
-int _printf(const char *format, ...)
+int _printf(char *format, ...)
 {
-	int  i = 0, k = 0;
-	int n_displayed = 0;
-	char *str = NULL;
-	va_list args;
-	int (*func)(va_list);
+	int written = 0, (*structype)(char *, va_list);
+	char q[3];
+	va_list pa;
 
-	va_start(args, format);
-
-	while (format[i] != '\0')
+	if (format == NULL)
+		return (-1);
+	q[2] = '\0';
+	va_start(pa, format);
+	_putchar(-1);
+	while (format[0])
 	{
-		if (format[i] != '%')
+		if (format[0] == '%')
 		{
-			_putchar(format[i]);
-			n_displayed++;
-		}
-		else if (format[i + 1] == '%')
-		{
-			i++;
-			_putchar('%');
-			n_displayed++;
+			structype = driver(format);
+			if (structype)
+			{
+				q[0] = '%';
+				q[1] = format[1];
+				written += structype(q, pa);
+			}
+			else if (format[1] != '\0')
+			{
+				written += _putchar('%');
+				written += _putchar(format[1]);
+			}
+			else
+			{
+				written += _putchar('%');
+				break;
+			}
+			format += 2;
 		}
 		else
 		{
-			func = _selec_func(format[i + 1]);
-			if (func != NULL)
-			{
-				n_displayed += func(args);
-				i++;
-			}
+			written += _putchar(format[0]);
+			format++;
 		}
-
-		i++;
 	}
-
-	va_end(args);
-	return (n_displayed);
+	_putchar(-2);
+	return (written);
 }
